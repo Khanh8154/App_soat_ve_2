@@ -24,4 +24,7 @@ class LocalTicketSource implements TicketDataSource {
       return 0; // Trả về 0 nếu có lỗi
     }
   }
+  Future<List<Ticket>> getAllTickets() async {
+    return _ticketBox.values.toList();
+  }
 }

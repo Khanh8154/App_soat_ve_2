@@ -61,4 +61,27 @@ class TicketRepository {
       return (TicketValidationResult.error, null);
     }
   }
+
+  Future<List<Ticket>> getScannedTicketsByEmployee(int employeeId) async {
+    final TicketDataSource dataSource = _useLocal ? _localDataSource : throw UnimplementedError();
+    
+    // Với Hive, chúng ta cần lấy tất cả vé và lọc thủ công
+    if (dataSource is LocalTicketSource) {
+      final allTickets = await dataSource.getAllTickets();
+      final scannedTickets = allTickets.where((ticket) {
+        return ticket.hasBeenScanned && ticket.scannedByEmployeeId == employeeId;
+      }).toList();
+      
+      // Sắp xếp theo thời gian quét gần nhất lên đầu
+      scannedTickets.sort((a, b) => b.scannedAt!.compareTo(a.scannedAt!));
+      
+      return scannedTickets;
+    }
+    
+    // Sau này sẽ implement cho remote source
+    return [];
+
+  }
+
+  
 }

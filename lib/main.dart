@@ -6,6 +6,8 @@ import 'data_sources/database_service.dart';
 import 'providers/auth_provider.dart'; // MỚI
 import 'screens/login_screen.dart'; // MỚI
 import 'screens/scanner_screen.dart'; // MỚI
+import 'providers/dashboard_provider.dart'; // THÊM DÒNG NÀY
+import 'screens/dashboard_screen.dart'; // THÊM DÒNG NÀY
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +19,7 @@ void main() async {
       providers: [
         // Cung cấp AuthProvider cho toàn bộ cây widget
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => DashboardProvider()),
       ],
       child: const MyApp(),
     ),
@@ -39,7 +42,7 @@ class MyApp extends StatelessWidget {
         builder: (context, authProvider, _) {
           if (authProvider.isAuthenticated) {
             // Nếu đã đăng nhập, hiển thị màn hình quét
-            return const ScannerScreen();
+            return const DashboardScreen();
           } else {
             // Nếu chưa, hiển thị màn hình đăng nhập
             return const LoginScreen();
